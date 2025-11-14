@@ -151,6 +151,17 @@ const NavigationBar = () => {
           </li>
         </ul>
 
+        {/* Logged in view */}
+        <div className="hidden md:flex space-x-2 lg:space-x-3">
+          <NavLink
+            to="/profile"
+            className=""
+          >
+            <img src="./assets/profileImage.png" className="w-10 h-10 rounded-full" alt="" />
+          </NavLink>
+        </div>
+
+        {/* Logged out View */}
         {/* Desktop Buttons */}
         <div className="hidden md:flex space-x-2 lg:space-x-3">
           <NavLink
@@ -271,6 +282,19 @@ const NavigationBar = () => {
             </li>
           </ul>
 
+          {/* Logged in View */}
+          <div className="flex flex-col items-center space-y-2 pb-4">
+            <NavLink
+              to="/profile"
+              onClick={closeMenu}
+              className="px-6 py-2 rounded-md font-medium w-4/5 flex items-center justify-center gap-5"
+            >
+              <img src="./assets/profileImage.png" className="w-10 h-10 rounded-full" alt="" />
+              <span className="text-sm font-medium">UserName</span>
+            </NavLink>
+          </div>
+
+          {/* Logged out View */}
           <div className="flex flex-col items-center space-y-2 pb-4">
             <NavLink
               to="/register"
