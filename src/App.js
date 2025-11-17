@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 
@@ -68,10 +68,59 @@ import UserProfile from "./pages/UserProfile.jsx";
 // // Simple auth check (real app >> backend >> check )
 // const isAuthenticated = true;
 // const isAdmin = true;
+import { testBackendConnection } from "./config/testApi.js";
 
 function App() {
+  const [apiStatus, setApiStatus] = React.useState({
+    loading: true,
+    data: null,
+    error: null,
+  });
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await testBackendConnection();
+        setApiStatus({ loading: false, data: response, error: null });
+      } catch (error) {
+        setApiStatus({ loading: false, data: null, error: error });
+        console.error("Error testing backend connection:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <Router>
+      {/* Temporary UI for API connection test */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "10px",
+          right: "10px",
+          padding: "10px",
+          background: "rgba(0, 0, 0, 0.8)",
+          color: "white",
+          borderRadius: "8px",
+          zIndex: 9999,
+          maxWidth: "300px",
+        }}
+      >
+        <h4 style={{ margin: "0 0 5px 0", borderBottom: "1px solid #555" }}>
+          API Connection Test
+        </h4>
+        {apiStatus.loading && <p>Loading...</p>}
+        {apiStatus.error && (
+          <p style={{ color: "#ff8a8a" }}>
+            Error: {apiStatus.error.message}
+          </p>
+        )}
+        {apiStatus.data && (
+          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+            {JSON.stringify(apiStatus.data, null, 2)}
+          </pre>
+        )}
+      </div>
       <ScrollToTop behavior="smooth" />
       <Routes>
         {/* Public routes with main layout (Navbar and Footer) */}
