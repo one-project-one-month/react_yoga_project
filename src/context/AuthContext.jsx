@@ -83,7 +83,6 @@ export function AuthProvider({ children }) {
     });
     if (data?.accessToken) {
       const userDetail = await authService.getUser(data.user.id);
-      console.log("Fetched user details after register: roleId", userDetail.data.roleId);
       setAccessToken(data.accessToken);
       setUser(data.user || null);
       setRole(userDetail.data.roleId);

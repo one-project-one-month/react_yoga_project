@@ -49,6 +49,9 @@ const Login = () => {
       })
       if(response.success && response.status === 200)
         navigate("/");
+      if(!response.success && response.status === 200){
+        setError(response.message)
+      }
     } catch(error){
       setError(error.response?.data?.message || "Login failed.");
     }
@@ -101,6 +104,11 @@ const Login = () => {
                 )}
               />
             </div>
+            {error  && (
+                       <div className="mt-3 text-red-600 text-sm">
+                         {error}
+                      </div>
+            )}
             <div className="space-y-4 mt-2">
               {/* forget password */}
               <div className="flex justify-end  text-sm text-gray-400">
