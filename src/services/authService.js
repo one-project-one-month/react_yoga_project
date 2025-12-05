@@ -145,6 +145,13 @@ export const authService = {
     const resp = await api.get(`/api/v1/users/${userId}`);
     return resp.data;
   },
+  // Send Password Reset Link
+  async forgetPassword({ email }){
+    const resp = await api.post(`/api/v1/forget-password`,{
+      email,
+    });
+    return resp.data;
+  },
 
   api,
 }

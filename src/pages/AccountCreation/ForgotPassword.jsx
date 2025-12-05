@@ -1,24 +1,43 @@
-import { Link } from "react-router";
+import { createHashRouter, Link } from "react-router";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
 import { Form, FormField } from "../../components/ui/form";
 
-import { loginFormSchema } from "../../components/FormSchema"; // login schema uses email validation
+import { forgotPasswordSchema } from "../../components/FormSchema"; // login schema uses email validation
 import FormFieldInput from "../../components/FormFieldInput";
 import LinkButton from "../../components/LinkButton";
 
+import { authService } from "../../services/authService";
+import { useState } from "react";
+import { set } from "zod";
+//import { email } from "zod";
+
 const ForgotPassword = () => {
+  const [message, setMessage] = useState('');
   const form = useForm({
-    resolver: yupResolver(loginFormSchema),
+    resolver: yupResolver(forgotPasswordSchema),
     criteriaMode: "firstError",
     defaultValues: { email: "" },
   });
 
-  function onSubmit(values) {
-    console.log("send code to", values.email);
+  async function onSubmit(values){
+    setMessage('');
+    try{
+      const response = await authService.forgetPassword({
+        email: values.email,
+      });
+      setMessage(response.data.message || `Password reset link sent to your email.`);
+    } catch (error){
+      setMessage(error.response?.data?.message || 'Failed to send reset link. Please try again.');
+      console.log('Error occurs in forget password');
+    }
+
   }
+  // function onSubmit(values) {
+  //   console.log("send code to", values.email);
+  // }
 
   return (
     <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
@@ -47,7 +66,10 @@ const ForgotPassword = () => {
               />
 
               {/* submit button*/}
-              <LinkButton text="Send code" className="mt-6" />
+              <LinkButton  text="Send code" className="mt-6" />
+            </div>
+            <div className="mt-3 text-sm text-red-500">
+              {message}
             </div>
           </form>
 
